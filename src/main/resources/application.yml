@@ -6,41 +6,42 @@ spring:
     user:
       name: admin
       password: admin123
+
   application:
     name: api-gateway
-    gateway:
-      routes:
-        - id: resident-service
-          uri: http://localhost:9090
-          predicates:
-            - Path=/resident/**
-        - id: grievance-service
-          uri: http://localhost:8082
-          predicates:
-            - Path=/grievance/**
-      default-filters:
-        - AddResponseHeader=X-Gateway-Header, GatewayActive
+
   main:
     web-application-type: reactive
+
   cloud:
     compatibility-verifier:
       enabled: false
-      gateway:
-        routes:
-          - id: resident-service
-            uri: http://resident-service.default.svc.cluster.local
-            predicates:
-              - Path=/resident/**
+    gateway:
+      routes:
+        - id: resident-service
+          uri: http://resident-service.default.svc.cluster.local:9090
+          predicates:
+            - Path=/resident/**
+      default-filters:
+        - AddResponseHeader=X-Gateway-Header, GatewayActive
 
 management:
   endpoints:
     web:
       exposure:
         include: "*"
+  endpoint:
+    health:
+      show-details: always
   metrics:
     export:
       prometheus:
         enabled: true
+  security:
+    enabled: true
+    roles: ACTUATOR
+  server:
+    add-application-context-header: false
 
 gateway:
   api-key: dharmala
@@ -48,3 +49,5 @@ gateway:
 logging:
   level:
     io.netty: DEBUG
+    org.springframework.cloud.gateway: DEBUG
+    org.springframework.web.reactive: DEBUG
