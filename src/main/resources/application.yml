@@ -18,10 +18,51 @@ main:
       enabled: false
     gateway:
       routes:
+        - id: dummy-root
+          uri: http://config-service:80
+          predicates:
+            - Path=/
         - id: resident-service
-          uri: http://resident-service.default.svc.cluster.local:9090
+          uri: http://resident-service:80
           predicates:
             - Path=/resident/**
+        - id: config-service
+          uri: http://config-service:80
+          predicates:
+            - Path=/config/**
+        - id: society-service
+          uri: http://society:80
+          predicates:
+            - Path=/society/**
+        - id: auth-service
+          uri: http://society-entry-auth-service:80
+          predicates:
+            - Path=/auth/**
+        - id: login-service
+          uri: http://society-login-service:80
+          predicates:
+            - Path=/login/**
+        - id: association-service
+          uri: http://association:80
+          predicates:
+            - Path=/association/**
+        - id: finance-service
+          uri: http://finance-service:80
+          predicates:
+            - Path=/finance/**
+        - id: grievance-service
+          uri: http://society-grievance-service:80
+          predicates:
+            - Path=/grievance/**
+        - id: festival-committee-service
+          uri: http://society-festival-committee-service:80
+          predicates:
+            - Path=/festival/**
+        - id: staff-mgmt-service
+          uri: http://staff-mgmt-service:80
+          predicates:
+            - Path=/staff/**
+
       default-filters:
         - AddResponseHeader=X-Gateway-Header, GatewayActive
 
